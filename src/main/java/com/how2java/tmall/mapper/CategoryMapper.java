@@ -2,7 +2,10 @@ package com.how2java.tmall.mapper;
 
 import com.how2java.tmall.pojo.Category;
 import java.util.List;
+import com.how2java.tmall.util.Page;
 
 public interface CategoryMapper {
-    List<Category> list();
+    public List<Category> list(Page page);
+
+    public int total();
 }
