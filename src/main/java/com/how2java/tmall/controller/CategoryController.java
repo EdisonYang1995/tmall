@@ -7,7 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,6 +39,17 @@ public class CategoryController {
         model.addAttribute("cs", cs);
         model.addAttribute("page", page);
         return "admin/listCategory";
+    }
+
+    @RequestMapping("admin_category_delete")
+    public String delete(int id,HttpSession session) throws IOException {
+        categoryService.delete(id);
+
+        File  imageFolder= new File(session.getServletContext().getRealPath("img/category"));
+        File file = new File(imageFolder,id+".jpg");
+        file.delete();
+
+        return "redirect:/admin_category_list";
     }
 
 }
