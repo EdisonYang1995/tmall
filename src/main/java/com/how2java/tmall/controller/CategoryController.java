@@ -3,6 +3,8 @@ package com.how2java.tmall.controller;
 import com.how2java.tmall.pojo.Category;
 import com.how2java.tmall.service.CategoryService;
 import com.how2java.tmall.util.Page;
+import com.how2java.tmall.util.ImageUtil;
+import com.how2java.tmall.util.UploadedImageFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +41,19 @@ public class CategoryController {
         model.addAttribute("cs", cs);
         model.addAttribute("page", page);
         return "admin/listCategory";
+    }
+
+    @RequestMapping("admin_category_add")
+    public String add(Category c, HttpSession session, UploadedImageFile uploadedImageFile) throws IOException {
+        categoryService.add(c);
+        File  imageFolder= new File(session.getServletContext().getRealPath("img/category"));
+        File file = new File(imageFolder,c.getId()+".jpg");
+        if(!file.getParentFile().exists())
+            file.getParentFile().mkdirs();
+        uploadedImageFile.getImage().transferTo(file);
+        BufferedImage img = ImageUtil.change2jpg(file);
+        ImageIO.write(img, "jpg", file);
+        return "redirect:/admin_category_list";
     }
 
     @RequestMapping("admin_category_delete")
