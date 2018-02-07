@@ -30,7 +30,6 @@ public class ForeController {
     OrderService orderService;
     @Autowired
     OrderItemService orderItemService;
-
     @RequestMapping("forehome")
     public String home(Model model) {
         List<Category> cs= categoryService.list();
@@ -67,6 +66,11 @@ public class ForeController {
             return "fore/login";
         }
         session.setAttribute("user", user);
+        return "redirect:forehome";
+    }
+    @RequestMapping("forelogout")
+    public String logout( HttpSession session) {
+        session.removeAttribute("user");
         return "redirect:forehome";
     }
 }
