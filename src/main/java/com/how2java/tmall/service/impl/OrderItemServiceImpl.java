@@ -56,6 +56,27 @@ public class OrderItemServiceImpl implements OrderItemService {
         }
     }
 
+    @Override
+    public int getSaleCount(int pid) {
+        OrderItemExample example =new OrderItemExample();
+        example.createCriteria().andPidEqualTo(pid);
+        List<OrderItem> ois =orderItemMapper.selectByExample(example);
+        int result =0;
+        for (OrderItem oi : ois) {
+            result+=oi.getNumber();
+        }
+        return result;
+    }
+
+    @Override
+    public List<OrderItem> listByUser(int uid) {
+        OrderItemExample example =new OrderItemExample();
+        example.createCriteria().andUidEqualTo(uid).andOidIsNull();
+        List<OrderItem> result =orderItemMapper.selectByExample(example);
+        setProduct(result);
+        return result;
+    }
+
     public void fill(Order o) {
         OrderItemExample example =new OrderItemExample();
         example.createCriteria().andOidEqualTo(o.getId());
@@ -86,16 +107,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         oi.setProduct(p);
     }
 
-    @Override
-    public int getSaleCount(int pid) {
-        OrderItemExample example =new OrderItemExample();
-        example.createCriteria().andPidEqualTo(pid);
-        List<OrderItem> ois =orderItemMapper.selectByExample(example);
-        int result =0;
-        for (OrderItem oi : ois) {
-            result+=oi.getNumber();
-        }
-        return result;
-    }
+    ;
 
 }
