@@ -15,6 +15,7 @@ import org.springframework.web.util.HtmlUtils;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("")
@@ -189,4 +190,22 @@ public class ForeController {
         }
         return "redirect:forebuy?oiid="+oiid;
     }
+
+    @RequestMapping("forebuy")
+    public String buy( Model model,String[] oiid,HttpSession session){
+        List<OrderItem> ois = new ArrayList<>();
+        float total = 0;
+
+        for (String strid : oiid) {
+            int id = Integer.parseInt(strid);
+            OrderItem oi= orderItemService.get(id);
+            total +=oi.getProduct().getPromotePrice()*oi.getNumber();
+            ois.add(oi);
+        }
+
+        session.setAttribute("ois", ois);
+        model.addAttribute("total", total);
+        return "fore/buy";
+    }
+
 }
